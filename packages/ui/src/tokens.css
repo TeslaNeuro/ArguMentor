@@ -1,0 +1,18 @@
+:root {
+  --am-ink: #0e1512;
+  --am-ink-elevated: #16201b;
+  --am-panel: #1c2922;
+  --am-line: rgba(214, 232, 220, 0.12);
+  --am-fog: #d6e8dc;
+  --am-muted: #8aa394;
+  --am-accent: #3ecf8e;
+  --am-accent-deep: #1f9a62;
+  --am-warn: #e2b15a;
+  --am-danger: #e07a6a;
+  --am-glow: rgba(62, 207, 142, 0.18);
+  --am-font-display: "Syne", "Avenir Next", sans-serif;
+  --am-font-body: "Source Serif 4", "Iowan Old Style", Georgia, serif;
+  --am-font-ui: "IBM Plex Sans", "Helvetica Neue", sans-serif;
+  --am-radius: 2px;
+  --am-max: 1120px;
+}

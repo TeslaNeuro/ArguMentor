@@ -1,0 +1,9 @@
+{
+  "extends": "@argumentor/typescript-config/base.json",
+  "compilerOptions": {
+    "noEmit": true,
+    "rootDir": "src",
+    "types": ["node"]
+  },
+  "include": ["src"]
+}

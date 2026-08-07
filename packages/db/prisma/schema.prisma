@@ -1,0 +1,126 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["postgresqlExtensions"]
+}
+
+datasource db {
+  provider   = "postgresql"
+  url        = env("DATABASE_URL")
+  extensions = [pgvector(map: "vector")]
+}
+
+model User {
+  id            String         @id @default(cuid())
+  clerkId       String         @unique
+  email         String
+  displayName   String?
+  preferences   Json           @default("{}")
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  sessions      DebateSession[]
+  skillProfile  SkillProfile?
+  memoryItems   MemoryItem[]
+  skillEvents   SkillEvent[]
+  trainingPlans TrainingPlan[]
+}
+
+model DebateSession {
+  id               String         @id @default(cuid())
+  userId           String
+  user             User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  topic            String
+  userSide         String
+  difficulty       String
+  personality      String
+  format           String
+  status           String         @default("pending")
+  phase            String         @default("opening")
+  round            Int            @default(1)
+  maxRounds        Int            @default(4)
+  timeLimitSeconds Int?
+  awaitingSpeaker  String         @default("opponent")
+  config           Json
+  createdAt        DateTime       @default(now())
+  updatedAt        DateTime       @updatedAt
+  completedAt      DateTime?
+  turns            DebateTurn[]
+  evaluation       Evaluation?
+  coachPlan        TrainingPlan?
+
+  @@index([userId, createdAt])
+}
+
+model DebateTurn {
+  id        String         @id @default(cuid())
+  sessionId String
+  session   DebateSession  @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  speaker   String
+  content   String
+  round     Int
+  phase     String
+  analysis  Json?
+  metadata  Json           @default("{}")
+  createdAt DateTime       @default(now())
+
+  @@index([sessionId, createdAt])
+}
+
+model Evaluation {
+  id        String        @id @default(cuid())
+  sessionId String        @unique
+  session   DebateSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  scores    Json
+  summary   String
+  feedback  Json
+  verdict   String
+  createdAt DateTime      @default(now())
+}
+
+model SkillProfile {
+  id         String   @id @default(cuid())
+  userId     String   @unique
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  dimensions Json
+  overall    Float    @default(2.5)
+  updatedAt  DateTime @updatedAt
+  createdAt  DateTime @default(now())
+}
+
+model SkillEvent {
+  id         String   @id @default(cuid())
+  userId     String
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  sessionId  String?
+  dimensions Json
+  source     String
+  createdAt  DateTime @default(now())
+
+  @@index([userId, createdAt])
+}
+
+model MemoryItem {
+  id        String                       @id @default(cuid())
+  userId    String
+  user      User                         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  kind      String
+  content   String
+  payload   Json                         @default("{}")
+  embedding Unsupported("vector(1536)")?
+  createdAt DateTime                     @default(now())
+
+  @@index([userId, kind])
+}
+
+model TrainingPlan {
+  id          String         @id @default(cuid())
+  userId      String
+  user        User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  sessionId   String?        @unique
+  session     DebateSession? @relation(fields: [sessionId], references: [id], onDelete: SetNull)
+  narrative   String
+  focusAreas  Json
+  drills      Json
+  createdAt   DateTime       @default(now())
+
+  @@index([userId, createdAt])
+}

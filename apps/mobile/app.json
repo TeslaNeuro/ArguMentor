@@ -1,0 +1,29 @@
+{
+  "name": "ArguMentor",
+  "slug": "argumentor",
+  "version": "0.1.0",
+  "orientation": "portrait",
+  "scheme": "argumentor",
+  "userInterfaceStyle": "dark",
+  "splash": {
+    "resizeMode": "contain",
+    "backgroundColor": "#0e1512"
+  },
+  "ios": {
+    "supportsTablet": true,
+    "bundleIdentifier": "app.argumentor.mobile"
+  },
+  "android": {
+    "adaptiveIcon": {
+      "backgroundColor": "#0e1512"
+    },
+    "package": "app.argumentor.mobile"
+  },
+  "plugins": ["expo-router"],
+  "experiments": {
+    "typedRoutes": true
+  },
+  "extra": {
+    "apiBaseUrl": "http://localhost:3000"
+  }
+}

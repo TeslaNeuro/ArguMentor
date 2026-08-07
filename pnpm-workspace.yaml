@@ -1,0 +1,35 @@
+packages:
+  - "apps/*"
+  - "packages/*"
+
+# pnpm 11+ settings (formerly package.json#pnpm / .npmrc)
+autoInstallPeers: true
+strictPeerDependencies: false
+confirmModulesPurge: false
+# Allow freshly published packages during active development.
+# Raise to 1440 (1 day) for stricter supply-chain defaults in production CI.
+minimumReleaseAge: 0
+minimumReleaseAgeStrict: false
+strictDepBuilds: false
+onlyBuiltDependencies:
+  - "@clerk/shared"
+  - "@prisma/client"
+  - "@prisma/engines"
+  - "@sentry/cli"
+  - core-js
+  - esbuild
+  - prisma
+  - sharp
+allowBuilds:
+  "@clerk/shared": true
+  "@prisma/client": true
+  "@prisma/engines": true
+  "@sentry/cli": true
+  core-js: true
+  esbuild: true
+  prisma: true
+  sharp: true
+
+overrides:
+  "@types/react": "^19.2.18"
+  "@types/react-dom": "^19.2.4"

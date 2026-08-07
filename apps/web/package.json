@@ -1,0 +1,37 @@
+{
+  "name": "@argumentor/web",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev --port 3000",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@argumentor/agents": "workspace:*",
+    "@argumentor/db": "workspace:*",
+    "@argumentor/debate-core": "workspace:*",
+    "@argumentor/ui": "workspace:*",
+    "@clerk/nextjs": "^6.9.6",
+    "@sentry/nextjs": "^8.47.0",
+    "ai": "^4.1.17",
+    "next": "^16.2.11",
+    "posthog-js": "^1.203.2",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "react-markdown": "^10.1.0",
+    "remark-gfm": "^4.0.1",
+    "zod": "^3.24.1"
+  },
+  "devDependencies": {
+    "@argumentor/typescript-config": "workspace:*",
+    "@types/node": "^22.10.5",
+    "@types/react": "^19.2.18",
+    "@types/react-dom": "^19.2.4",
+    "typescript": "^7.0.2",
+    "vitest": "^2.1.8"
+  }
+}

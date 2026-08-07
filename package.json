@@ -1,0 +1,28 @@
+{
+  "name": "argumentor",
+  "private": true,
+  "version": "0.1.0",
+  "description": "ArguMentor — AI debate partner, reasoning coach, and performance analytics",
+  "author": "Arshia Keshvari",
+  "license": "MIT",
+  "scripts": {
+    "dev": "turbo run dev",
+    "build": "turbo run build",
+    "lint": "turbo run lint",
+    "test": "turbo run test",
+    "db:generate": "pnpm --filter @argumentor/db generate",
+    "db:push": "pnpm --filter @argumentor/db push",
+    "db:studio": "pnpm --filter @argumentor/db studio",
+    "typecheck": "turbo run typecheck"
+  },
+  "devDependencies": {
+    "@argumentor/typescript-config": "workspace:*",
+    "@types/node": "^22.10.5",
+    "turbo": "^2.10.8",
+    "typescript": "^7.0.2"
+  },
+  "packageManager": "pnpm@11.20.0",
+  "engines": {
+    "node": ">=22"
+  }
+}
