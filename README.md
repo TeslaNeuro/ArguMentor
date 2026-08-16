@@ -23,8 +23,6 @@ Bring your own OpenRouter, Anthropic, or OpenAI key in **Settings**. Keys stay i
   <img alt="Dashboard" src="docs/screenshots/dashboard.svg" width="270" />
 </p>
 
----
-
 ## 🗺️ Explore
 
 - [✨ Features](#-features)
@@ -36,8 +34,6 @@ Bring your own OpenRouter, Anthropic, or OpenAI key in **Settings**. Keys stay i
 - [🤝 Contributing](#-contributing)
 - [👤 Author](#-author)
 - [📄 License](#-license)
-
----
 
 ## ✨ Features
 
@@ -51,8 +47,6 @@ Bring your own OpenRouter, Anthropic, or OpenAI key in **Settings**. Keys stay i
 | 🧩 | **Skill Memory** | Progress across sessions |
 | 🎙️ | **Optional Voice** | Push-to-talk + spoken opponent turns — toggleable in the UI |
 | 🔐 | **Bring Your Own Key** | OpenRouter, Anthropic, or OpenAI — configured in Settings, never committed |
-
----
 
 ## 🚀 Quick start
 
@@ -70,8 +64,6 @@ pnpm --filter @argumentor/web dev
 
 🌐 Open **[http://localhost:3000](http://localhost:3000)** → **Settings** → paste your API key → **Start a debate**.
 
----
-
 ## 🔑 Bring your own key
 
 ArguMentor does not ship with a model key. Add yours in the app:
@@ -82,8 +74,6 @@ ArguMentor does not ship with a model key. Add yours in the app:
 4. Save — it stays in this browser only
 
 Get an OpenRouter key at [openrouter.ai/keys](https://openrouter.ai/keys).
-
----
 
 ## 📁 Project structure
 
@@ -97,8 +87,6 @@ ArguMentor/
 └── ⚙️ packages/config       Shared TypeScript config
 ```
 
----
-
 ## 🧰 Stack
 
 | Layer | Choice |
@@ -108,8 +96,6 @@ ArguMentor/
 | 🤖 AI | Vercel AI SDK · your key in Settings |
 | 🚀 Deploy | Vercel-ready (`apps/web`) |
 
----
-
 ## 📜 Scripts
 
 | Command | What it does |
@@ -118,21 +104,15 @@ ArguMentor/
 | `pnpm test` | ✅ Run tests |
 | `pnpm build` | 🏗️ Production build |
 
----
-
 ## 🤝 Contributing
 
 See [CONTRIBUTING.md](CONTRIBUTING.md).
-
----
 
 ## 👤 Author
 
 **Arshia Keshvari**
 
 Built for people who want to argue better — not just louder.
-
----
 
 ## 📄 License
 
