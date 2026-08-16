@@ -31,7 +31,7 @@ Bring your own OpenRouter, Anthropic, or OpenAI key in **Settings**. Keys stay i
 - [📁 Project structure](#-project-structure)
 - [🧰 Stack](#-stack)
 - [📜 Scripts](#-scripts)
-- [🤝 Contributing](#-contributing)
+- [📚 Docs](#-docs)
 - [👤 Author](#-author)
 - [📄 License](#-license)
 
@@ -104,9 +104,13 @@ ArguMentor/
 | `pnpm test` | ✅ Run tests |
 | `pnpm build` | 🏗️ Production build |
 
-## 🤝 Contributing
+## 📚 Docs
 
-See [CONTRIBUTING.md](CONTRIBUTING.md).
+| | Guide | What it covers |
+|---|---|---|
+| 🧠 | [Architecture](docs/architecture.md) | Debate loop, packages, API lifecycle |
+| 🚀 | [Deployment](docs/deployment.md) | Vercel, defaults, bring-your-own-key |
+| 🏠 | [Self-hosting](docs/self-hosting.md) | Clerk, Postgres, rate limits, analytics |
 
 ## 👤 Author
 
