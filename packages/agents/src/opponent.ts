@@ -7,6 +7,7 @@ import {
 } from "@argumentor/debate-core";
 import { streamText } from "ai";
 import { getModel } from "./model";
+import type { LlmCredentials } from "./credentials";
 
 export interface OpponentTurnInput {
   config: CreateDebateConfig;
@@ -14,6 +15,7 @@ export interface OpponentTurnInput {
   round: number;
   transcript: Array<{ speaker: string; content: string }>;
   skillSnapshot?: SkillDimensions | null;
+  credentials?: LlmCredentials | null;
 }
 
 export function streamOpponentTurn(input: OpponentTurnInput) {
@@ -35,7 +37,7 @@ export function streamOpponentTurn(input: OpponentTurnInput) {
     .join("\n\n");
 
   return streamText({
-    model: getModel("opponent"),
+    model: getModel("opponent", input.credentials),
     system,
     prompt: history
       ? `Debate transcript so far:\n\n${history}\n\nDeliver your next turn as the opponent.`

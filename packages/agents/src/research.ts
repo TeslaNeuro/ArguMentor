@@ -1,23 +1,22 @@
 import { generateText } from "ai";
-import { getModel, hasLlmCredentials } from "./model";
+import { getModel } from "./model";
+import {
+  hasLlmCredentials,
+  MISSING_LLM_KEY_MESSAGE,
+  type LlmCredentials,
+} from "./credentials";
 
 export async function runResearchAgent(input: {
   topic: string;
   side: "proposition" | "opposition";
+  credentials?: LlmCredentials | null;
 }): Promise<{ brief: string; viewpoints: string[] }> {
-  if (!hasLlmCredentials()) {
-    return {
-      brief: `Research brief placeholder for "${input.topic}" (${input.side}). Add an LLM API key for live research summaries.`,
-      viewpoints: [
-        "Economic framing",
-        "Rights / ethics framing",
-        "Empirical outcomes framing",
-      ],
-    };
+  if (!hasLlmCredentials(input.credentials)) {
+    throw new Error(MISSING_LLM_KEY_MESSAGE);
   }
 
   const { text } = await generateText({
-    model: getModel("research"),
+    model: getModel("research", input.credentials),
     system: `You are ArguMentor's Research Agent. Summarize major viewpoints and prepare evidence themes for a debate. Mark uncertainty. Do not invent precise statistics or fake citations.
 
 Write pure Markdown only — never HTML tags (no <br>, <p>, <div>, etc.). Prefer headings and bullet lists. If you use a table, keep each cell to a single line; put separate points in separate rows or as a list under a heading instead of stacking lines inside a cell.`,

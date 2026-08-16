@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { LlmKeyBanner } from "@/components/llm-key-banner";
 import { track } from "@/lib/analytics";
 
 export default function NewDebatePage() {
@@ -45,6 +46,7 @@ export default function NewDebatePage() {
         Choose the arena. ArguMentor will open as your opponent, adapt to your skill, and
         judge the round when it ends.
       </p>
+      <LlmKeyBanner />
       <form className="panel stack" onSubmit={onSubmit}>
         <label className="field">
           Topic

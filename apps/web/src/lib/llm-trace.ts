@@ -28,11 +28,29 @@ export function traceLlmCall<T>(
 }
 
 function push(event: TraceEvent) {
-  recent.unshift(event);
+  const meta = event.meta ? redactMeta(event.meta) : undefined;
+  const safe = { ...event, meta };
+  recent.unshift(safe);
   if (recent.length > 100) recent.pop();
   if (process.env.NODE_ENV === "development") {
-    console.info(`[llm-trace] ${event.name} ${event.durationMs}ms`, event.meta ?? {});
+    console.info(`[llm-trace] ${safe.name} ${safe.durationMs}ms`, safe.meta ?? {});
   }
+}
+
+const SENSITIVE_KEY = /key|token|secret|authorization|password/i;
+
+function redactMeta(meta: Record<string, unknown>): Record<string, unknown> {
+  const next: Record<string, unknown> = {};
+  for (const [key, value] of Object.entries(meta)) {
+    if (SENSITIVE_KEY.test(key)) {
+      next[key] = "[redacted]";
+    } else if (typeof value === "string" && /sk-[a-zA-Z0-9_-]{8,}/.test(value)) {
+      next[key] = "[redacted]";
+    } else {
+      next[key] = value;
+    }
+  }
+  return next;
 }
 
 export function getRecentLlmTraces() {

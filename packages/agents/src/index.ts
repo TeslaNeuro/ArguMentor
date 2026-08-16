@@ -1,4 +1,5 @@
-export * from "./model";
+export * from "./credentials";
+export { getModel } from "./model";
 export * from "./opponent";
 export * from "./judge";
 export * from "./analysis";

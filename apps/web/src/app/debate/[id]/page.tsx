@@ -4,6 +4,9 @@ import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import { Scorecard } from "@/components/scorecard";
+import { Markdown } from "@/components/markdown";
+import { LlmKeyBanner } from "@/components/llm-key-banner";
+import { apiFetch } from "@/lib/api";
 import { speakText, usePushToTalk, useTtsPreference } from "@/lib/voice";
 import { track } from "@/lib/analytics";
 
@@ -90,7 +93,7 @@ export default function DebateRoomPage() {
     setError(null);
     setStreaming("");
     try {
-      const res = await fetch(`/api/debates/${session.id}/opponent`, { method: "POST" });
+      const res = await apiFetch(`/api/debates/${session.id}/opponent`, { method: "POST" });
       const contentType = res.headers.get("content-type") || "";
       if (contentType.includes("application/json")) {
         const data = await res.json();
@@ -133,7 +136,7 @@ export default function DebateRoomPage() {
     setBusy(true);
     setError(null);
     try {
-      const res = await fetch(`/api/debates/${session.id}/turn`, {
+      const res = await apiFetch(`/api/debates/${session.id}/turn`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ content: draft.trim() }),
@@ -158,7 +161,7 @@ export default function DebateRoomPage() {
     if (!session) return;
     setBusy(true);
     try {
-      const res = await fetch(`/api/debates/${session.id}/end`, { method: "POST" });
+      const res = await apiFetch(`/api/debates/${session.id}/end`, { method: "POST" });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "End failed");
       setEvaluation(data.evaluation);
@@ -183,6 +186,7 @@ export default function DebateRoomPage() {
 
   return (
     <section className="section stack">
+      <LlmKeyBanner />
       <div>
         <p className="muted" style={{ textTransform: "uppercase", letterSpacing: "0.08em", fontSize: "0.75rem" }}>
           {session.phase} · round {session.round}/{session.maxRounds} · {session.difficulty} ·{" "}
@@ -208,18 +212,24 @@ export default function DebateRoomPage() {
             <div className="meta">
               {turn.speaker} · round {turn.round} · {turn.phase}
             </div>
-            <div className="body">{turn.content}</div>
+            <div className="body">
+              <Markdown content={turn.content} />
+            </div>
             {turn.analysis?.weaknesses?.length ? (
-              <p className="muted" style={{ fontSize: "0.9rem", marginTop: "0.4rem" }}>
-                Analysis: {turn.analysis.weaknesses[0]?.teachingNote}
-              </p>
+              <div className="muted" style={{ fontSize: "0.9rem", marginTop: "0.4rem" }}>
+                <Markdown
+                  content={`**Analysis:** ${turn.analysis.weaknesses[0]?.teachingNote ?? ""}`}
+                />
+              </div>
             ) : null}
           </article>
         ))}
         {streaming ? (
           <article className="turn opponent">
             <div className="meta">opponent · streaming</div>
-            <div className="body">{streaming}</div>
+            <div className="body">
+              <Markdown content={streaming} />
+            </div>
           </article>
         ) : null}
       </div>

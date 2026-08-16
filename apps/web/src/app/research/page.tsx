@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 import { Markdown } from "@/components/markdown";
+import { LlmKeyBanner } from "@/components/llm-key-banner";
+import { apiFetch } from "@/lib/api";
 
 export default function ResearchPage() {
   const [topic, setTopic] = useState(
@@ -18,7 +20,7 @@ export default function ResearchPage() {
     setBusy(true);
     setError(null);
     try {
-      const res = await fetch("/api/research", {
+      const res = await apiFetch("/api/research", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ topic, side }),
@@ -41,6 +43,7 @@ export default function ResearchPage() {
           Prepare evidence themes and viewpoint lenses before you step onto the floor.
         </p>
       </div>
+      <LlmKeyBanner />
       <div className="panel stack">
         <label className="field">
           Topic

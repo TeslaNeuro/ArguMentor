@@ -15,8 +15,11 @@ export default function HomePage() {
         <Link className="btn" href="/debate/new">
           Start a debate
         </Link>
-        <Link className="btn ghost" href="/dashboard">
-          View progress
+        <Link className="btn ghost" href="/research">
+          Research assistant
+        </Link>
+        <Link className="btn ghost" href="/settings">
+          Add API key
         </Link>
       </div>
     </section>

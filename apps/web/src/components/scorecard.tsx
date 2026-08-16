@@ -1,5 +1,7 @@
 "use client";
 
+import { Markdown } from "@/components/markdown";
+
 type Evaluation = {
   scores: Record<string, number>;
   summary: string;
@@ -35,9 +37,7 @@ export function Scorecard({
         <p className="support" style={{ marginBottom: 0 }}>
           Verdict: <strong>{evaluation.verdict.replaceAll("_", " ")}</strong>
         </p>
-        <p style={{ fontFamily: "var(--am-font-body)", lineHeight: 1.55, margin: 0 }}>
-          {evaluation.summary}
-        </p>
+        <Markdown content={evaluation.summary} />
         <div className="score-grid">
           {Object.entries(scores).map(([key, value]) => (
             <div className="score" key={key}>
@@ -54,7 +54,9 @@ export function Scorecard({
             <h3 style={{ fontFamily: "var(--am-font-display)" }}>Strengths</h3>
             <ul className="list-plain">
               {feedback.strengths.map((s) => (
-                <li key={s}>{s}</li>
+                <li key={s}>
+                  <Markdown inline content={s} />
+                </li>
               ))}
             </ul>
           </div>
@@ -62,7 +64,9 @@ export function Scorecard({
             <h3 style={{ fontFamily: "var(--am-font-display)" }}>Improvements</h3>
             <ul className="list-plain">
               {feedback.improvements.map((s) => (
-                <li key={s}>{s}</li>
+                <li key={s}>
+                  <Markdown inline content={s} />
+                </li>
               ))}
             </ul>
           </div>
@@ -72,11 +76,9 @@ export function Scorecard({
           <div className="stack">
             {feedback.keyMistakes.map((m) => (
               <div key={m.mistake} className="panel" style={{ background: "rgba(14,21,18,0.5)" }}>
-                <strong>{m.mistake}</strong>
-                <p className="muted" style={{ marginBottom: 0 }}>
-                  {m.whyItMatters}
-                </p>
-                <p style={{ marginBottom: 0, fontFamily: "var(--am-font-body)" }}>{m.howToFix}</p>
+                <Markdown content={`**${m.mistake}**`} />
+                <Markdown content={m.whyItMatters} />
+                <Markdown content={m.howToFix} />
               </div>
             ))}
           </div>
@@ -86,15 +88,15 @@ export function Scorecard({
       {plan ? (
         <div className="panel stack">
           <h2>Coach plan</h2>
-          <p style={{ fontFamily: "var(--am-font-body)", lineHeight: 1.55, margin: 0 }}>
-            {plan.narrative}
-          </p>
+          <Markdown content={plan.narrative} />
           <div>
             <h3 style={{ fontFamily: "var(--am-font-display)" }}>Focus areas</h3>
             <ul className="list-plain">
-              {plan.focusAreas.map((f) => (
-                <li key={f}>{f}</li>
-              ))}
+            {plan.focusAreas.map((f) => (
+              <li key={f}>
+                <Markdown inline content={f} />
+              </li>
+            ))}
             </ul>
           </div>
           <div className="stack">
@@ -103,9 +105,9 @@ export function Scorecard({
                 <strong>
                   {d.title} · {d.durationMinutes}m
                 </strong>
-                <p className="muted" style={{ margin: "0.25rem 0 0" }}>
-                  {d.description}
-                </p>
+                <div className="muted" style={{ margin: "0.25rem 0 0" }}>
+                  <Markdown content={d.description} />
+                </div>
               </div>
             ))}
           </div>

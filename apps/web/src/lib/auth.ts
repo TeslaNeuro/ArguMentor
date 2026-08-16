@@ -1,5 +1,5 @@
 import { auth, currentUser } from "@clerk/nextjs/server";
-import { memoryDb, type StoredUser } from "@argumentor/db";
+import { debateRepository, type StoredUser } from "@argumentor/db";
 
 const DEV_USER_CLERK_ID = "dev_local_user";
 
@@ -12,7 +12,7 @@ export function isDevAuthEnabled() {
 
 export async function requireAppUser(): Promise<StoredUser> {
   if (isDevAuthEnabled()) {
-    return memoryDb.upsertUser({
+    return debateRepository.upsertUser({
       clerkId: DEV_USER_CLERK_ID,
       email: "coach@argumentor.local",
       displayName: "Local Debater",
@@ -21,7 +21,7 @@ export async function requireAppUser(): Promise<StoredUser> {
 
   const { userId } = await auth();
   if (!userId) {
-    throw new Response("Unauthorized", { status: 401 });
+    throw new Error("Sign in to continue");
   }
 
   const user = await currentUser();
@@ -30,7 +30,7 @@ export async function requireAppUser(): Promise<StoredUser> {
     user?.emailAddresses[0]?.emailAddress ??
     `${userId}@users.argumentor.app`;
 
-  return memoryDb.upsertUser({
+  return debateRepository.upsertUser({
     clerkId: userId,
     email,
     displayName: user?.fullName ?? user?.username ?? null,

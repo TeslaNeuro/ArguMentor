@@ -5,8 +5,7 @@ export default function DebateStub() {
     <View style={styles.container}>
       <Text style={styles.title}>Debate (native)</Text>
       <Text style={styles.body}>
-        Phase 2+ native debate room will stream opponent turns from the shared API
-        (`/api/debates`) using packages from the monorepo.
+        Native debate UI is not the supported product. Use the web app for live debates.
       </Text>
     </View>
   );

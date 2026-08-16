@@ -15,6 +15,7 @@ export function SiteHeader() {
         <Link href="/dashboard">Dashboard</Link>
         <Link href="/debate/new">New debate</Link>
         <Link href="/research">Research</Link>
+        <Link href="/settings">Settings</Link>
       </nav>
       <div className="auth-slot">
         {clerkEnabled ? (
@@ -31,7 +32,9 @@ export function SiteHeader() {
             </SignedIn>
           </>
         ) : (
-          <span className="dev-badge">Dev auth</span>
+          <Link href="/settings" className="muted" style={{ fontSize: "0.85rem" }}>
+            API key
+          </Link>
         )}
       </div>
     </header>

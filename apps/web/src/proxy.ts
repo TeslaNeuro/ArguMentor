@@ -5,9 +5,9 @@ import type { NextRequest } from "next/server";
 const isProtected = createRouteMatcher([
   "/debate(.*)",
   "/dashboard(.*)",
+  "/settings(.*)",
   "/api/debates(.*)",
   "/api/profile(.*)",
-  "/api/coach(.*)",
   "/api/research(.*)",
 ]);
 

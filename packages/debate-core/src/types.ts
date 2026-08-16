@@ -164,6 +164,23 @@ export function mergeSkillProfile(
   };
 }
 
+export function skillDimensionsFromScores(
+  scores: Partial<SkillDimensions> & { overall?: number },
+): SkillDimensions {
+  const pick = (key: keyof SkillDimensions) => {
+    const value = Number(scores[key]);
+    return Number.isFinite(value) ? Math.max(0, Math.min(5, value)) : DEFAULT_SKILL_PROFILE[key];
+  };
+  return {
+    clarity: pick("clarity"),
+    evidence: pick("evidence"),
+    logic: pick("logic"),
+    persuasiveness: pick("persuasiveness"),
+    responsiveness: pick("responsiveness"),
+    fallacyAvoidance: pick("fallacyAvoidance"),
+  };
+}
+
 export const DEFAULT_SKILL_PROFILE: SkillDimensions = {
   clarity: 2.5,
   evidence: 2.5,

@@ -6,7 +6,7 @@ export default function SignUpPage() {
       <section className="section">
         <h2>Sign up</h2>
         <p className="support">
-          Clerk is not configured. Dev auth is active — you can use the app without signing up.
+          An account is optional here. Add an API key in Settings and start a debate.
         </p>
       </section>
     );

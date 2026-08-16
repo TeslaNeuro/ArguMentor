@@ -4,17 +4,25 @@ import {
   reduceDebateState,
   type CreateDebateConfig,
 } from "@argumentor/debate-core";
-import { hasLlmCredentials, streamOpponentTurn } from "@argumentor/agents";
+import { streamOpponentTurn } from "@argumentor/agents";
 import { NextResponse } from "next/server";
 import { requireAppUser } from "@/lib/auth";
 import { debateRepo } from "@/lib/repo";
 import { traceLlmCall } from "@/lib/llm-trace";
+import { isLlmCredentials, requireLlmCredentials } from "@/lib/llm-request";
+import { enforceRateLimit } from "@/lib/rate-limit";
 
 export async function POST(
-  _req: Request,
+  req: Request,
   context: { params: Promise<{ id: string }> },
 ) {
   const user = await requireAppUser();
+  const limited = await enforceRateLimit(`opponent:${user.id}`, 20);
+  if (limited) return limited;
+
+  const credentials = requireLlmCredentials(req);
+  if (!isLlmCredentials(credentials)) return credentials;
+
   const { id } = await context.params;
   const session = await debateRepo.getSession(id);
   if (!session || session.userId !== user.id) {
@@ -45,28 +53,6 @@ export async function POST(
   const turns = await debateRepo.listTurns(id);
   const skill = await debateRepo.getSkillProfile(user.id);
 
-  if (!hasLlmCredentials()) {
-    const content = demoOpponentTurn(session.topic, session.userSide, state.round);
-    await debateRepo.addTurn({
-      sessionId: id,
-      speaker: "opponent",
-      content,
-      round: state.round,
-      phase: state.phase,
-    });
-    const next = reduceDebateState(
-      { ...state, status: "active" },
-      { type: "OPPONENT_TURN_COMPLETED" },
-    );
-    await debateRepo.updateSession(id, {
-      status: next.status,
-      phase: next.phase,
-      round: next.round,
-      awaitingSpeaker: next.awaitingSpeaker,
-    });
-    return NextResponse.json({ content, demo: true, session: next });
-  }
-
   const result = await traceLlmCall(
     "opponent_stream",
     { sessionId: id, round: state.round },
@@ -77,6 +63,7 @@ export async function POST(
         round: state.round,
         transcript: turns.map((t) => ({ speaker: t.speaker, content: t.content })),
         skillSnapshot: skill.dimensions,
+        credentials,
       }),
   );
 
@@ -121,14 +108,4 @@ export async function POST(
       "X-Argumentor-Phase": state.phase,
     },
   });
-}
-
-function demoOpponentTurn(topic: string, userSide: string, round: number) {
-  return `Round ${round} — opposing ${userSide} on “${topic}”.
-
-Your opening claim rests on an unexamined assumption: that the status quo’s costs are decisive without a clear baseline. Define the metric of success you are optimizing for, then show why your mechanism outperforms the strongest alternative—not a strawman.
-
-If your case depends on a single causal chain, pressure-test the weakest link. I will concede nothing you have not earned with evidence or entailment.
-
-(Demo mode: add ANTHROPIC_API_KEY or OPENAI_API_KEY for a live opponent.)`;
 }

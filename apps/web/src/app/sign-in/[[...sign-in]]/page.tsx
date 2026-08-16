@@ -6,7 +6,7 @@ export default function SignInPage() {
       <section className="section">
         <h2>Sign in</h2>
         <p className="support">
-          Clerk is not configured. Dev auth is active — you can use the app without signing in.
+          Sign-in is optional here. Add an API key in Settings and start a debate.
         </p>
       </section>
     );

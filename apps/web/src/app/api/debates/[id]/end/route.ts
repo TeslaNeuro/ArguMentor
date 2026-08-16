@@ -6,14 +6,23 @@ import {
 import { runCoachAgent, runJudgeAgent } from "@argumentor/agents";
 import { NextResponse } from "next/server";
 import { requireAppUser } from "@/lib/auth";
+import { persistEvaluationMemories } from "@/lib/evaluation-memories";
+import { isLlmCredentials, requireLlmCredentials } from "@/lib/llm-request";
 import { debateRepo } from "@/lib/repo";
+import { enforceRateLimit } from "@/lib/rate-limit";
 import { traceLlmCall } from "@/lib/llm-trace";
 
 export async function POST(
-  _req: Request,
+  req: Request,
   context: { params: Promise<{ id: string }> },
 ) {
   const user = await requireAppUser();
+  const limited = await enforceRateLimit(`end:${user.id}`, 20);
+  if (limited) return limited;
+
+  const credentials = requireLlmCredentials(req);
+  if (!isLlmCredentials(credentials)) return credentials;
+
   const { id } = await context.params;
   const session = await debateRepo.getSession(id);
   if (!session || session.userId !== user.id) {
@@ -50,6 +59,7 @@ export async function POST(
     runJudgeAgent({
       config: session.config as CreateDebateConfig,
       transcript: turns.map((t) => ({ speaker: t.speaker, content: t.content })),
+      credentials,
     }),
   );
 
@@ -58,6 +68,7 @@ export async function POST(
   const plan = await runCoachAgent({
     evaluation: feedback,
     skillProfile: skill.dimensions,
+    credentials,
   });
   await debateRepo.saveTrainingPlan({
     userId: user.id,
@@ -66,6 +77,7 @@ export async function POST(
     focusAreas: plan.focusAreas,
     drills: plan.drills,
   });
+  await persistEvaluationMemories(user.id, id, feedback);
   await debateRepo.updateSession(id, {
     status: "completed",
     phase: "completed",

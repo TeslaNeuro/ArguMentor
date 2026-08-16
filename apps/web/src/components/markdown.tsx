@@ -37,13 +37,25 @@ function renderWithHtmlBreaks(children: ReactNode): ReactNode {
   });
 }
 
-export function Markdown({ content }: { content: string }) {
+export function Markdown({
+  content,
+  inline = false,
+}: {
+  content: string;
+  inline?: boolean;
+}) {
+  const Wrapper = inline ? "span" : "div";
   return (
-    <div className="markdown">
+    <Wrapper className={inline ? "markdown markdown-inline" : "markdown"}>
       <ReactMarkdown
         remarkPlugins={[remarkGfm]}
         components={{
-          p: ({ children }) => <p>{renderWithHtmlBreaks(children)}</p>,
+          p: ({ children }) =>
+            inline ? (
+              <span>{renderWithHtmlBreaks(children)}</span>
+            ) : (
+              <p>{renderWithHtmlBreaks(children)}</p>
+            ),
           li: ({ children }) => <li>{renderWithHtmlBreaks(children)}</li>,
           td: ({ children }) => <td>{renderWithHtmlBreaks(children)}</td>,
           th: ({ children }) => <th>{renderWithHtmlBreaks(children)}</th>,
@@ -51,6 +63,6 @@ export function Markdown({ content }: { content: string }) {
       >
         {content}
       </ReactMarkdown>
-    </div>
+    </Wrapper>
   );
 }

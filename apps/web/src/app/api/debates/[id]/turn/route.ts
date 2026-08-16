@@ -9,7 +9,10 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 import { requireAppUser } from "@/lib/auth";
 import { debateRepo } from "@/lib/repo";
+import { persistEvaluationMemories } from "@/lib/evaluation-memories";
+import { isLlmCredentials, requireLlmCredentials } from "@/lib/llm-request";
 import { traceLlmCall } from "@/lib/llm-trace";
+import { enforceRateLimit } from "@/lib/rate-limit";
 import { trackServer } from "@/lib/server-analytics";
 
 const BodySchema = z.object({
@@ -21,6 +24,12 @@ export async function POST(
   context: { params: Promise<{ id: string }> },
 ) {
   const user = await requireAppUser();
+  const limited = await enforceRateLimit(`turn:${user.id}`, 30);
+  if (limited) return limited;
+
+  const credentials = requireLlmCredentials(req);
+  if (!isLlmCredentials(credentials)) return credentials;
+
   const { id } = await context.params;
   const session = await debateRepo.getSession(id);
   if (!session || session.userId !== user.id) {
@@ -47,7 +56,7 @@ export async function POST(
   }
 
   const analysis = await traceLlmCall("turn_analysis", { sessionId: id }, () =>
-    runAnalysisAgent(parsed.data.content),
+    runAnalysisAgent(parsed.data.content, credentials),
   );
 
   const turn = await debateRepo.addTurn({
@@ -77,6 +86,7 @@ export async function POST(
       runJudgeAgent({
         config: session.config as CreateDebateConfig,
         transcript: turns.map((t) => ({ speaker: t.speaker, content: t.content })),
+        credentials,
       }),
     );
     evaluation = await debateRepo.saveEvaluation(id, feedback);
@@ -84,6 +94,7 @@ export async function POST(
     plan = await runCoachAgent({
       evaluation: feedback,
       skillProfile: skill.dimensions,
+      credentials,
     });
     await debateRepo.saveTrainingPlan({
       userId: user.id,
@@ -92,20 +103,7 @@ export async function POST(
       focusAreas: plan.focusAreas,
       drills: plan.drills,
     });
-    await debateRepo.addMemory({
-      userId: user.id,
-      kind: "evaluation_summary",
-      content: feedback.summary,
-      payload: { sessionId: id, scores: feedback.scores },
-    });
-    for (const mistake of feedback.keyMistakes.slice(0, 2)) {
-      await debateRepo.addMemory({
-        userId: user.id,
-        kind: "weakness",
-        content: mistake.mistake,
-        payload: mistake,
-      });
-    }
+    await persistEvaluationMemories(user.id, id, feedback);
     await debateRepo.updateSession(id, {
       status: "completed",
       phase: "completed",

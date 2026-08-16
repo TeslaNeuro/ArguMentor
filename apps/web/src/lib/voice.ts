@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 
 /**
- * Push-to-talk speech recognition using the Web Speech API (Phase 2 voice).
+ * Push-to-talk speech recognition using the Web Speech API.
  * Gracefully no-ops when unsupported.
  */
 export function usePushToTalk(onTranscript: (text: string) => void) {

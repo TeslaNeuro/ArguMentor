@@ -63,6 +63,7 @@ a {
 .site-header {
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
   gap: 1.5rem;
   width: min(100% - 2rem, var(--am-max));
   margin: 0 auto;
@@ -78,6 +79,7 @@ a {
 
 .nav {
   display: flex;
+  flex-wrap: wrap;
   gap: 1rem;
   flex: 1;
   font-size: 0.92rem;
@@ -253,7 +255,17 @@ textarea {
   font-family: var(--am-font-body);
   font-size: 1.05rem;
   line-height: 1.6;
-  white-space: pre-wrap;
+}
+
+.markdown-inline,
+.markdown-inline p,
+.list-plain .markdown {
+  display: inline;
+}
+
+.markdown-inline > p {
+  display: inline;
+  margin: 0;
 }
 
 .score-grid {
@@ -301,12 +313,59 @@ textarea {
   line-height: 1.55;
 }
 
-.muted {
-  color: var(--am-muted);
+.memory-item {
+  padding-bottom: 0.85rem;
+  margin-bottom: 0.85rem;
+  border-bottom: 1px solid var(--am-line);
+}
+
+.memory-item:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+.memory-item .markdown {
+  font-size: 0.95rem;
+}
+
+.memory-item .markdown h1,
+.memory-item .markdown h2,
+.memory-item .markdown h3,
+.memory-item .markdown h4 {
+  font-size: 1.05rem;
+  margin: 0.7rem 0 0.35rem;
 }
 
 .error {
   color: var(--am-danger);
+}
+
+.banner {
+  margin: 0 0 1rem;
+  padding: 0.85rem 1rem;
+  border: 1px solid rgba(226, 177, 90, 0.35);
+  background: rgba(226, 177, 90, 0.08);
+  color: var(--am-fog);
+  font-size: 0.92rem;
+}
+
+.banner a {
+  color: var(--am-accent);
+  text-decoration: underline;
+}
+
+.key-row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  transform: none;
 }
 
 .stack {
@@ -354,10 +413,6 @@ textarea {
   .grid-2,
   .grid-3 {
     grid-template-columns: 1fr;
-  }
-
-  .nav {
-    display: none;
   }
 
   .hero h1 {

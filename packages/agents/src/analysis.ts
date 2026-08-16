@@ -3,16 +3,20 @@ import {
   TurnAnalysisSchema,
   type TurnAnalysis,
 } from "@argumentor/debate-core";
-import { getModel, hasLlmCredentials } from "./model";
+import { getModel } from "./model";
+import { hasLlmCredentials, type LlmCredentials } from "./credentials";
 import { generateStructured } from "./structured";
 
-export async function runAnalysisAgent(turnText: string): Promise<TurnAnalysis> {
-  if (!hasLlmCredentials()) {
+export async function runAnalysisAgent(
+  turnText: string,
+  credentials?: LlmCredentials | null,
+): Promise<TurnAnalysis> {
+  if (!hasLlmCredentials(credentials)) {
     return heuristicAnalysis(turnText);
   }
 
   return generateStructured({
-    model: getModel("analysis"),
+    model: getModel("analysis", credentials),
     schema: TurnAnalysisSchema,
     system: buildAnalysisSystemPrompt(),
     prompt: `Analyze this user debate turn:\n\n${turnText}`,

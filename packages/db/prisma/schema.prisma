@@ -82,6 +82,7 @@ model SkillProfile {
   user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   dimensions Json
   overall    Float    @default(2.5)
+  evaluationsApplied Int @default(0)
   updatedAt  DateTime @updatedAt
   createdAt  DateTime @default(now())
 }

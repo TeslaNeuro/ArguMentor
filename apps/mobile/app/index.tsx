@@ -7,8 +7,8 @@ export default function Index() {
       <Text style={styles.brand}>ArguMentor</Text>
       <Text style={styles.lede}>Train against an elite debate mind.</Text>
       <Text style={styles.note}>
-        Expo shell shares `@argumentor/debate-core` with the web monorepo and will call the
-        Next.js debate API. Use the web app for the full Phase 1 experience.
+        Expo shell shares `@argumentor/debate-core` with the web monorepo. Use the web app
+        for the full debate experience.
       </Text>
       <Link href="/debate" style={styles.link}>
         Debate stub

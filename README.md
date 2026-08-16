@@ -9,11 +9,19 @@
   <img alt="pnpm" src="https://img.shields.io/badge/pnpm-F69220?style=for-the-badge&logo=pnpm&logoColor=white" />
 </p>
 
-ArguMentor is an open-source **debate training platform**. Pick a topic, argue turn-by-turn with an adaptive opponent, get judged with structured feedback, and improve over time with coaching and research tools.
+ArguMentor is an open-source **debate training platform**. Pick a topic, argue turn-by-turn with an adaptive opponent, get judged with structured feedback, and improve with coaching and research tools.
+
+Bring your own OpenRouter, Anthropic, or OpenAI key in **Settings**. Keys stay in your browser.
 
 > 🧠 Not a chatbot wrapper — a full practice loop:
 >
 > **🗣️ Debate → ⚖️ Evaluate → 📈 Learn**
+
+<p align="center">
+  <img alt="Settings — bring your own API key" src="docs/screenshots/settings.svg" width="270" />
+  <img alt="Debate room" src="docs/screenshots/debate.svg" width="270" />
+  <img alt="Dashboard" src="docs/screenshots/dashboard.svg" width="270" />
+</p>
 
 ---
 
@@ -21,12 +29,10 @@ ArguMentor is an open-source **debate training platform**. Pick a topic, argue t
 
 - [✨ Features](#-features)
 - [🚀 Quick start](#-quick-start)
-- [🔑 Add an LLM key](#-add-an-llm-key-recommended)
+- [🔑 Bring your own key](#-bring-your-own-key)
 - [📁 Project structure](#-project-structure)
 - [🧰 Stack](#-stack)
 - [📜 Scripts](#-scripts)
-- [⚙️ Configuration](#️-configuration-cheat-sheet)
-- [🧭 Roadmap](#-roadmap)
 - [🤝 Contributing](#-contributing)
 - [👤 Author](#-author)
 - [📄 License](#-license)
@@ -42,44 +48,40 @@ ArguMentor is an open-source **debate training platform**. Pick a topic, argue t
 | 🔬 | **Turn Analysis** | Claims, evidence, assumptions & weakness hints after every turn |
 | 🎓 | **Personal Coach** | Training plans and drills from your latest evaluation |
 | 📚 | **Research Assistant** | Evidence briefs & viewpoint lenses before you hit the floor |
-| 🧩 | **Skill Memory** | Progress across sessions (local memory · Postgres-ready) |
-| 🎙️ | **Optional Voice** | Push-to-talk + TTS for opponent turns — toggleable in the UI |
+| 🧩 | **Skill Memory** | Progress across sessions |
+| 🎙️ | **Optional Voice** | Push-to-talk + spoken opponent turns — toggleable in the UI |
+| 🔐 | **Bring Your Own Key** | OpenRouter, Anthropic, or OpenAI — configured in Settings, never committed |
 
 ---
 
 ## 🚀 Quick start
 
-**Requirements:** Node.js **22+** (required by pnpm 11) · [pnpm](https://pnpm.io) **11.20+** (Corepack recommended)
+**Requirements:** Node.js **24+** · [pnpm](https://pnpm.io) **11.22+** (Corepack recommended)
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/ArguMentor.git
+git clone https://github.com/TeslaNeuro/ArguMentor.git
 cd ArguMentor
 
-corepack enable && corepack prepare pnpm@11.20.0 --activate
+corepack enable && corepack prepare pnpm@11.22.0 --activate
 
 pnpm install
-cp .env.example apps/web/.env.local
 pnpm --filter @argumentor/web dev
 ```
 
-🌐 Open **[http://localhost:3000](http://localhost:3000)** and start a debate.
+🌐 Open **[http://localhost:3000](http://localhost:3000)** → **Settings** → paste your API key → **Start a debate**.
 
-💡 Dev auth is on by default (`ARGUMENTOR_DEV_AUTH=true`), so you can explore without setting up Clerk.
+---
 
-### 🔑 Add an LLM key (recommended)
+## 🔑 Bring your own key
 
-Without a key, the app still runs in **demo mode**. For a real opponent and richer judging, use [OpenRouter](https://openrouter.ai/keys) (one key → many models):
+ArguMentor does not ship with a model key. Add yours in the app:
 
-```bash
-# apps/web/.env.local
-OPENROUTER_API_KEY=sk-or-v1-...
-OPENROUTER_MODEL=anthropic/claude-sonnet-4
-OPENROUTER_ANALYSIS_MODEL=anthropic/claude-3.5-haiku
-```
+1. Open **Settings**
+2. Choose **OpenRouter** (easiest — one key, many models), **Anthropic**, or **OpenAI**
+3. Paste the key and pick models
+4. Save — it stays in this browser only
 
-♻️ Restart the dev server after editing env vars.
-
-You can also use `ANTHROPIC_API_KEY` or `OPENAI_API_KEY` directly if you prefer.
+Get an OpenRouter key at [openrouter.ai/keys](https://openrouter.ai/keys).
 
 ---
 
@@ -87,11 +89,10 @@ You can also use `ANTHROPIC_API_KEY` or `OPENAI_API_KEY` directly if you prefer.
 
 ```text
 ArguMentor/
-├── 🌐 apps/web              Next.js web app (primary product)
-├── 📱 apps/mobile           Expo shell (early native scaffold)
+├── 🌐 apps/web              Next.js web app
 ├── 🧠 packages/debate-core  Debate state machine, schemas, prompts
 ├── 🤖 packages/agents       Opponent · Judge · Analysis · Coach · Research
-├── 🗄️ packages/db           Prisma schema (Neon/Postgres) + local memory store
+├── 🗄️ packages/db           Persistence
 ├── 🎨 packages/ui           Shared design tokens
 └── ⚙️ packages/config       Shared TypeScript config
 ```
@@ -103,14 +104,9 @@ ArguMentor/
 | Layer | Choice |
 |---|---|
 | 📦 Monorepo | Turborepo + pnpm |
-| 🌐 Web | Next.js 16 App Router · TypeScript 7 |
-| 🔐 Auth | Clerk (optional · local dev auth included) |
-| 🤖 AI | Vercel AI SDK + OpenRouter / Anthropic / OpenAI |
-| 🗄️ Data | Neon Postgres + Prisma (optional · in-memory fallback) |
+| 🌐 Web | Next.js App Router · TypeScript |
+| 🤖 AI | Vercel AI SDK · your key in Settings |
 | 🚀 Deploy | Vercel-ready (`apps/web`) |
-| 📦 Tooling | Turborepo 2.10 · pnpm 11 |
-
-📖 Deeper docs: [architecture](docs/architecture.md) · [deployment](docs/deployment.md)
 
 ---
 
@@ -119,36 +115,14 @@ ArguMentor/
 | Command | What it does |
 |---|---|
 | `pnpm --filter @argumentor/web dev` | 🟢 Run the web app |
-| `pnpm test` | ✅ Run package tests |
+| `pnpm test` | ✅ Run tests |
 | `pnpm build` | 🏗️ Production build |
-| `pnpm db:generate` | 🧬 Generate Prisma client |
-| `pnpm db:push` | 📤 Push schema to Postgres |
 
 ---
 
-## ⚙️ Configuration cheat sheet
+## 🤝 Contributing
 
-| Variable | Purpose |
-|---|---|
-| 🔑 `OPENROUTER_API_KEY` | Preferred LLM gateway |
-| 🟣 `ANTHROPIC_API_KEY` / 🟢 `OPENAI_API_KEY` | Direct providers (if OpenRouter unset) |
-| 🧪 `ARGUMENTOR_DEV_AUTH` | `true` skips Clerk for local use |
-| 👤 `CLERK_*` | Production auth |
-| 🗄️ `DATABASE_URL` | Neon / Postgres (optional locally) |
-| 📊 `NEXT_PUBLIC_POSTHOG_*` / 🛰️ `SENTRY_DSN` | Observability (optional) |
-
-Full template → [`.env.example`](.env.example)
-
----
-
-## 🧭 Roadmap
-
-- [x] 🥊 Debate sessions, streaming opponent, judge scorecard
-- [x] 🔬 Analysis, coach plans, research briefs, voice toggle
-- [ ] 🧩 Deeper long-term memory (pgvector retrieval)
-- [ ] 📱 Native mobile debate UI (Expo)
-- [ ] 👥 Multiplayer / human-vs-human with AI judge
-- [ ] 🛡️ Production hardening (rate limits, workers, cost controls)
+See [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ---
 

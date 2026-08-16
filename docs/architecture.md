@@ -1,31 +1,23 @@
-# Architecture notes
+# How ArguMentor works
 
-See the Phase 0 plan for the full decision record. This document maps the implemented code.
+The web app runs a debate loop: create a session, stream an opponent turn, store the user’s reply with analysis, then judge and coach when the round ends.
 
-## Runtime topology (Phase 1)
+## Pieces
 
-- **Client**: `apps/web` Next.js App Router (PWA-capable)
-- **API**: Route Handlers under `apps/web/src/app/api`
-- **Orchestrator**: `packages/debate-core` finite-state machine
-- **Agents**: `packages/agents` (Opponent stream, Judge, Analysis, Coach, Research)
-- **Persistence**: `packages/db` Prisma schema for Neon + in-memory store used when `DATABASE_URL` is unset
+- **Web app** (`apps/web`): UI and API routes
+- **Debate core** (`packages/debate-core`): session state machine, schemas, prompts
+- **Agents** (`packages/agents`): opponent, judge, analysis, coach, research
+- **Data** (`packages/db`): in-memory store by default; Postgres via Prisma when `DATABASE_URL` is set
 
-## Debate turn lifecycle
+Agents do not call each other. The API decides when each one runs.
 
-1. `POST /api/debates` creates session
-2. Debate room loads → `POST /api/debates/:id/opponent` streams opponent turn
-3. `POST /api/debates/:id/turn` stores user turn + analysis; advances state
-4. On final round or `POST .../end` → Judge + Coach + skill/memory updates
+## Bring your own key
 
-## Multi-agent contracts
+Model calls use the API key the visitor saves in Settings. The browser sends it on AI requests; the server uses it for that request only and does not store it.
 
-Agents share Zod schemas from `@argumentor/debate-core`. The orchestrator decides *when* agents run; agents never chat with each other in Phase 1.
+## Debate lifecycle
 
-## Phase 2+ already scaffolded
-
-- Analysis engine on every user turn
-- Coach plans persisted after evaluation
-- Memory items for summaries/weaknesses/research
-- Voice: Web Speech push-to-talk + speechSynthesis TTS
-- Research API + UI
-- Expo app shell in `apps/mobile`
+1. `POST /api/debates` creates a session
+2. The debate room calls `POST /api/debates/:id/opponent` (streamed text)
+3. `POST /api/debates/:id/turn` stores the user turn and analysis
+4. On the final round or `POST /api/debates/:id/end`, judge and coach run, then skill and memory records update

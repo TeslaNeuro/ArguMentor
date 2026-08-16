@@ -5,7 +5,8 @@ import {
   type CreateDebateConfig,
   type JudgeFeedback,
 } from "@argumentor/debate-core";
-import { getModel, hasLlmCredentials } from "./model";
+import { getModel } from "./model";
+import { hasLlmCredentials, type LlmCredentials } from "./credentials";
 import { generateStructured } from "./structured";
 
 const JUDGE_EXAMPLE = `{
@@ -34,8 +35,9 @@ const JUDGE_EXAMPLE = `{
 export async function runJudgeAgent(input: {
   config: CreateDebateConfig;
   transcript: Array<{ speaker: string; content: string }>;
+  credentials?: LlmCredentials | null;
 }): Promise<JudgeFeedback> {
-  if (!hasLlmCredentials()) {
+  if (!hasLlmCredentials(input.credentials)) {
     return mockJudgeFeedback(input.config.topic);
   }
 
@@ -45,7 +47,7 @@ export async function runJudgeAgent(input: {
     .join("\n\n");
 
   return generateStructured({
-    model: getModel("judge"),
+    model: getModel("judge", input.credentials),
     schema: JudgeFeedbackSchema,
     system: buildJudgeSystemPrompt({
       topic: input.config.topic,

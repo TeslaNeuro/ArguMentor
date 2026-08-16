@@ -2,6 +2,7 @@ import {
   averageSkill,
   DEFAULT_SKILL_PROFILE,
   mergeSkillProfile,
+  skillDimensionsFromScores,
   type CreateDebateConfig,
   type DebatePhase,
   type JudgeFeedback,
@@ -63,6 +64,7 @@ export interface StoredSkillProfile {
   userId: string;
   dimensions: SkillDimensions;
   overall: number;
+  evaluationsApplied: number;
 }
 
 export interface StoredMemoryItem {
@@ -140,6 +142,7 @@ export const memoryDb = {
       userId: user.id,
       dimensions: { ...DEFAULT_SKILL_PROFILE },
       overall: averageSkill(DEFAULT_SKILL_PROFILE),
+      evaluationsApplied: 0,
     });
     return user;
   },
@@ -263,22 +266,31 @@ export const memoryDb = {
   },
 
   async getSkillProfile(userId: string) {
-    return (
-      store().skills.get(userId) ?? {
+    const skill = store().skills.get(userId);
+    if (!skill) {
+      return {
         userId,
         dimensions: { ...DEFAULT_SKILL_PROFILE },
         overall: averageSkill(DEFAULT_SKILL_PROFILE),
-      }
-    );
+        evaluationsApplied: 0,
+      };
+    }
+    return {
+      ...skill,
+      evaluationsApplied: skill.evaluationsApplied ?? 0,
+    };
   },
 
   async applyEvaluationToSkill(userId: string, scores: SkillDimensions) {
     const current = await memoryDb.getSkillProfile(userId);
-    const dimensions = mergeSkillProfile(current.dimensions, scores);
+    const incoming = skillDimensionsFromScores(scores);
+    const weight = current.evaluationsApplied === 0 ? 1 : 0.35;
+    const dimensions = mergeSkillProfile(current.dimensions, incoming, weight);
     const next = {
       userId,
       dimensions,
       overall: averageSkill(dimensions),
+      evaluationsApplied: current.evaluationsApplied + 1,
     };
     store().skills.set(userId, next);
     return next;
@@ -330,3 +342,5 @@ export const memoryDb = {
     return (store().plans.get(userId) ?? [])[0] ?? null;
   },
 };
+
+export type DebateRepository = typeof memoryDb;

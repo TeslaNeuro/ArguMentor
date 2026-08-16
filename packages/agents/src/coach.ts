@@ -1,6 +1,7 @@
 import { buildCoachSystemPrompt, type JudgeFeedback, type SkillDimensions } from "@argumentor/debate-core";
 import { z } from "zod";
-import { getModel, hasLlmCredentials } from "./model";
+import { getModel } from "./model";
+import { hasLlmCredentials, type LlmCredentials } from "./credentials";
 import { generateStructured } from "./structured";
 
 export const CoachPlanSchema = z.object({
@@ -19,6 +20,7 @@ export type CoachPlan = z.infer<typeof CoachPlanSchema>;
 export async function runCoachAgent(input: {
   evaluation: JudgeFeedback;
   skillProfile: SkillDimensions;
+  credentials?: LlmCredentials | null;
 }): Promise<CoachPlan> {
   const fallback = (): CoachPlan => ({
     narrative:
@@ -43,12 +45,12 @@ export async function runCoachAgent(input: {
     ],
   });
 
-  if (!hasLlmCredentials()) {
+  if (!hasLlmCredentials(input.credentials)) {
     return fallback();
   }
 
   return generateStructured({
-    model: getModel("coach"),
+    model: getModel("coach", input.credentials),
     schema: CoachPlanSchema,
     system: buildCoachSystemPrompt(),
     prompt: JSON.stringify({
