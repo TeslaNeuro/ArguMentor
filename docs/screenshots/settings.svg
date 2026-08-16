@@ -1,26 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" width="880" height="560" viewBox="0 0 880 560" role="img" aria-label="ArguMentor Settings">
   <defs>
-    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+    <linearGradient id="settings-bg" x1="0" y1="0" x2="1" y2="1">
       <stop offset="0%" stop-color="#0b1210"/>
       <stop offset="100%" stop-color="#121c17"/>
     </linearGradient>
-    <radialGradient id="glow" cx="80%" cy="0%" r="70%">
+    <radialGradient id="settings-glow" cx="80%" cy="0%" r="70%">
       <stop offset="0%" stop-color="#3ecf8e" stop-opacity="0.22"/>
       <stop offset="100%" stop-color="#3ecf8e" stop-opacity="0"/>
     </radialGradient>
   </defs>
-  <rect width="880" height="560" rx="18" fill="url(#bg)"/>
-  <rect width="880" height="560" rx="18" fill="url(#glow)"/>
+  <rect width="880" height="560" rx="18" fill="url(#settings-bg)"/>
+  <rect width="880" height="560" rx="18" fill="url(#settings-glow)"/>
   <rect x="28" y="22" width="824" height="44" rx="10" fill="#16201b" stroke="#2a3d33"/>
-  <text x="48" y="50" fill="#d6e8dc" font-family="Avenir Next, Helvetica, sans-serif" font-size="18" font-weight="700">ArguMentor</text>
+  <text x="48" y="50" fill="#d6e8dc" font-family="Helvetica, sans-serif" font-size="18" font-weight="700">ArguMentor</text>
   <text x="200" y="50" fill="#8aa394" font-family="Helvetica, sans-serif" font-size="13">Dashboard</text>
   <text x="300" y="50" fill="#8aa394" font-family="Helvetica, sans-serif" font-size="13">New debate</text>
   <text x="410" y="50" fill="#3ecf8e" font-family="Helvetica, sans-serif" font-size="13">Settings</text>
-  <rect x="48" y="96" width="784" height="420" rx="14" fill="#16201bcc" stroke="#2a3d33"/>
+  <rect x="48" y="96" width="784" height="420" rx="14" fill="#16201b" fill-opacity="0.8" stroke="#2a3d33"/>
   <text x="76" y="148" fill="#d6e8dc" font-family="Georgia, serif" font-size="32">Settings</text>
   <text x="76" y="180" fill="#8aa394" font-family="Helvetica, sans-serif" font-size="15">Bring your own key. It stays in this browser.</text>
   <text x="76" y="228" fill="#8aa394" font-family="Helvetica, sans-serif" font-size="12">PROVIDER</text>
-  <rect x="76" y="240" width="280" height="44" rx="8" fill="#0f1713" stroke="#3ecf8e55"/>
+  <rect x="76" y="240" width="280" height="44" rx="8" fill="#0f1713" stroke="#3ecf8e" stroke-opacity="0.33"/>
   <text x="96" y="268" fill="#d6e8dc" font-family="Helvetica, sans-serif" font-size="15">OpenRouter</text>
   <text x="76" y="322" fill="#8aa394" font-family="Helvetica, sans-serif" font-size="12">API KEY</text>
   <rect x="76" y="334" width="520" height="44" rx="8" fill="#0f1713" stroke="#2a3d33"/>

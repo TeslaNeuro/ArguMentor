@@ -1,42 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" width="880" height="560" viewBox="0 0 880 560" role="img" aria-label="ArguMentor dashboard">
   <defs>
-    <linearGradient id="bg3" x1="0" y1="0" x2="1" y2="1">
+    <linearGradient id="dash-bg" x1="0" y1="0" x2="1" y2="1">
       <stop offset="0%" stop-color="#0b1210"/>
       <stop offset="100%" stop-color="#121c17"/>
     </linearGradient>
-    <radialGradient id="glow3" cx="80%" cy="0%" r="70%">
+    <radialGradient id="dash-glow" cx="80%" cy="0%" r="70%">
       <stop offset="0%" stop-color="#3ecf8e" stop-opacity="0.2"/>
       <stop offset="100%" stop-color="#3ecf8e" stop-opacity="0"/>
     </radialGradient>
   </defs>
-  <rect width="880" height="560" rx="18" fill="url(#bg3)"/>
-  <rect width="880" height="560" rx="18" fill="url(#glow3)"/>
+  <rect width="880" height="560" rx="18" fill="url(#dash-bg)"/>
+  <rect width="880" height="560" rx="18" fill="url(#dash-glow)"/>
   <text x="48" y="64" fill="#d6e8dc" font-family="Georgia, serif" font-size="32">Dashboard</text>
-  <text x="48" y="96" fill="#8aa394" font-family="Helvetica, sans-serif" font-size="15">Skill profile · 3.12 overall</text>
-  <rect x="48" y="128" width="170" height="118" rx="12" fill="#16201bcc" stroke="#2a3d33"/>
+  <text x="48" y="96" fill="#8aa394" font-family="Helvetica, sans-serif" font-size="15">Skill profile &#183; 3.12 overall</text>
+  <rect x="48" y="128" width="170" height="118" rx="12" fill="#16201b" fill-opacity="0.8" stroke="#2a3d33"/>
   <text x="68" y="178" fill="#d6e8dc" font-family="Georgia, serif" font-size="34">3.4</text>
   <text x="68" y="206" fill="#8aa394" font-family="Helvetica, sans-serif" font-size="13">clarity</text>
   <rect x="68" y="218" width="120" height="6" rx="3" fill="#1a3d2e"/>
   <rect x="68" y="218" width="82" height="6" rx="3" fill="#3ecf8e"/>
-  <rect x="234" y="128" width="170" height="118" rx="12" fill="#16201bcc" stroke="#2a3d33"/>
+  <rect x="234" y="128" width="170" height="118" rx="12" fill="#16201b" fill-opacity="0.8" stroke="#2a3d33"/>
   <text x="254" y="178" fill="#d6e8dc" font-family="Georgia, serif" font-size="34">2.8</text>
   <text x="254" y="206" fill="#8aa394" font-family="Helvetica, sans-serif" font-size="13">evidence</text>
   <rect x="254" y="218" width="120" height="6" rx="3" fill="#1a3d2e"/>
   <rect x="254" y="218" width="67" height="6" rx="3" fill="#3ecf8e"/>
-  <rect x="420" y="128" width="170" height="118" rx="12" fill="#16201bcc" stroke="#2a3d33"/>
+  <rect x="420" y="128" width="170" height="118" rx="12" fill="#16201b" fill-opacity="0.8" stroke="#2a3d33"/>
   <text x="440" y="178" fill="#d6e8dc" font-family="Georgia, serif" font-size="34">3.1</text>
   <text x="440" y="206" fill="#8aa394" font-family="Helvetica, sans-serif" font-size="13">logic</text>
   <rect x="440" y="218" width="120" height="6" rx="3" fill="#1a3d2e"/>
   <rect x="440" y="218" width="74" height="6" rx="3" fill="#3ecf8e"/>
-  <rect x="606" y="128" width="170" height="118" rx="12" fill="#16201bcc" stroke="#2a3d33"/>
+  <rect x="606" y="128" width="170" height="118" rx="12" fill="#16201b" fill-opacity="0.8" stroke="#2a3d33"/>
   <text x="626" y="178" fill="#d6e8dc" font-family="Georgia, serif" font-size="34">3.0</text>
   <text x="626" y="206" fill="#8aa394" font-family="Helvetica, sans-serif" font-size="13">persuasion</text>
   <rect x="626" y="218" width="120" height="6" rx="3" fill="#1a3d2e"/>
   <rect x="626" y="218" width="72" height="6" rx="3" fill="#3ecf8e"/>
-  <rect x="48" y="272" width="784" height="244" rx="14" fill="#16201bcc" stroke="#2a3d33"/>
+  <rect x="48" y="272" width="784" height="244" rx="14" fill="#16201b" fill-opacity="0.8" stroke="#2a3d33"/>
   <text x="72" y="316" fill="#d6e8dc" font-family="Georgia, serif" font-size="22">Latest coach plan</text>
   <text x="72" y="356" fill="#d6e8dc" font-family="Georgia, serif" font-size="16">Pressure-test evidence quality and definitional clarity.</text>
-  <text x="72" y="400" fill="#8aa394" font-family="Helvetica, sans-serif" font-size="14">Focus · Evidence specificity · Premise definition · Rebuttal structure</text>
+  <text x="72" y="400" fill="#8aa394" font-family="Helvetica, sans-serif" font-size="14">Focus &#183; Evidence specificity &#183; Premise definition &#183; Rebuttal structure</text>
   <rect x="72" y="430" width="280" height="52" rx="10" fill="#0f1713" stroke="#2a3d33"/>
-  <text x="92" y="462" fill="#3ecf8e" font-family="Helvetica, sans-serif" font-size="14">Claim–warrant–impact · 15 min</text>
+  <text x="92" y="462" fill="#3ecf8e" font-family="Helvetica, sans-serif" font-size="14">Claim&#8211;warrant&#8211;impact &#183; 15 min</text>
 </svg>
